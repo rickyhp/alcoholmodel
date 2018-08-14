@@ -13,6 +13,9 @@ import argparse
 import imutils
 import cv2
 
+IMG_WIDTH = 224 # LeNet 28, VGG16 224
+IMG_HEIGHT = 224 # LeNet 28, VGG16 224
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True,
@@ -26,7 +29,7 @@ image = cv2.imread(args["image"])
 orig = image.copy()
  
 # pre-process the image for classification
-image = cv2.resize(image, (28, 28))
+image = cv2.resize(image, (IMG_WIDTH, IMG_HEIGHT))
 image = image.astype("float") / 255.0
 image = img_to_array(image)
 image = np.expand_dims(image, axis=0)
@@ -37,6 +40,7 @@ model = load_model(args["model"])
  
 # classify the input image
 (gambling, alcohol) = model.predict(image)[0]
+print("Alcohol/Gambling: ",alcohol, " ", gambling)
 
 # build the label
 label = "Alcohol" if alcohol > gambling else "Gambling"
